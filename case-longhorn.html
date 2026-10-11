@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Longhorn - Кейс</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=4">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4">
+    <link rel="apple-touch-icon" href="favicon.png?v=4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #1f1f1f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 5%; }
+        
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 40px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .back-link-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            flex-shrink: 0;
+            transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .back-link-icon svg {
+            width: 17px;
+            height: 17px;
+            display: block;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .back-link:hover .back-link-icon {
+            background-color: #ffffff;
+            color: #000000;
+            transform: translateX(-4px);
+        }
+
+        .back-link:hover .back-link-icon svg {
+            transform: translateX(-2px);
+        }
+
+        .back-link:active .back-link-icon {
+            transform: scale(0.94);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            line-height: 1.25;
+            margin: 48px 0 20px;
+            color: #ffffff;
+            letter-spacing: -0.025em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.35;
+            margin: 32px 0 16px;
+            color: #ffffff;
+            letter-spacing: -0.015em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        p {
+            color: #cccccc;
+            margin-bottom: 24px;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 68ch;
+            text-wrap: pretty;
+            overflow-wrap: break-word;
+        }
+
+        ul, ol {
+            color: #cccccc;
+            margin-bottom: 24px;
+            padding-left: 20px;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 68ch;
+        }
+
+        li {
+            margin-bottom: 12px;
+            text-wrap: pretty;
+        }
+
+        strong { color: #ffffff; font-weight: 600; }
+        
+        .role-block { background: var(--accent); padding: 24px; border-radius: 16px; margin: 32px 0; }
+        .role-block p { margin-bottom: 8px; font-size: 1rem; }
+        .role-block p:last-child { margin-bottom: 0; }
+        
+        /* Lightbox Styles */
+        .case-image { 
+            width: 100%; 
+            border-radius: 16px; 
+            margin: 32px 0; 
+            display: block; 
+            background: var(--accent); 
+            min-height: 200px; 
+            object-fit: cover;
+            cursor: zoom-in; 
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .image-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .image-grid .case-image, .image-grid-3 .case-image { margin: 0; }
+
+        @media (max-width: 600px) {
+            .image-grid, .image-grid-3 { grid-template-columns: 1fr; }
+        }
+        
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(13, 13, 13, 0.95);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000; cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+        .lightbox.active { opacity: 1; pointer-events: all; }
+        .lightbox img {
+            max-width: 95vw; max-height: 95vh; border-radius: 12px;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+        .lightbox.active img { transform: scale(1); }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <a href="index.html" class="back-link">
+            <span class="back-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </span>
+            <span>Назад к проектам</span>
+        </a>
+        
+        <h1>Longhorn: Приложение для контроля приёма лекарств</h1>
+        
+        <p>Мобильное приложение, помогающее людям соблюдать курс лечения и вовремя принимать лекарства. Проект создан для сети частных клиник, которая заметила, что пациенты часто путаются в схемах приёма, забывают о дозировках и прерывают лечение раньше времени.</p>
+        
+        <!-- Обложка -->
+        <img src="images/longhorn-cover.png" alt="Обложка Longhorn" class="case-image" onerror="this.style.display='none'">
+
+        <div class="role-block">
+            <p><strong>Цель:</strong> Спроектировать удобный, эстетичный и понятный интерфейс приложения для приёма лекарств</p>
+            <p><strong>Формат:</strong> Мобильное приложение</p>
+            <p><strong>Моя роль:</strong> UX/UI-дизайнер (исследование, сценарии, визуальный дизайн)</p>
+        </div>
+
+        <h2>Проблема</h2>
+        <p>Пациенты часто сталкиваются с трудностями:</p>
+        <ul>
+            <li>Принимают несколько препаратов в разное время</li>
+            <li>Забывают отмечать принятые лекарства</li>
+            <li>Не знают о несовместимости назначенных средств</li>
+            <li>Прерывают курс из-за потери мотивации</li>
+        </ul>
+
+        <h2>Решение</h2>
+        <p><strong>Longhorn</strong> предлагает:</p>
+        <ul>
+            <li>Добавление лекарств из базы по рецепту или фото упаковки</li>
+            <li>Своевременные напоминания и удобные отметки о приёме</li>
+            <li>Автоматическую проверку несовместимости препаратов</li>
+            <li>Ведение нескольких профилей (для себя, детей или пожилых родителей)</li>
+            <li>Наглядный прогресс курса для поддержания мотивации</li>
+        </ul>
+
+        <h2>Целевая аудитория</h2>
+        <ul>
+            <li>Люди, проходящие лечение и принимающие лекарства курсом</li>
+            <li>Родственники, которые помогают следить за здоровьем близких</li>
+            <li>Пользователи 25–65 лет, ценящие простоту и системный подход к здоровью</li>
+        </ul>
+        <img src="images/longhorn-audience.png" alt="Целевая аудитория" class="case-image" onerror="this.style.display='none'">
+
+        <h2>Исследование</h2>
+        <p><strong>Методы:</strong> глубинные интервью, анализ конкурентов (Medisafe, MyTherapy, Dosecast)</p>
+        <p><strong>Ключевые инсайты:</strong></p>
+        <ul>
+            <li>Пользователи хотят минимализма без давящей «больничной» эстетики</li>
+            <li>Критически важна простота на старте: без обязательной регистрации и перегруженных форм</li>
+            <li>Повторные напоминания и шкала прогресса помогают доводить лечение до конца</li>
+            <li>Необходима поддержка семейных профилей в одном аккаунте</li>
+        </ul>
+
+        <div class="image-grid">
+            <img src="images/longhorn-res1.png" alt="Исследование 1" class="case-image" onerror="this.style.display='none'">
+            <img src="images/longhorn-res2.png" alt="Исследование 2" class="case-image" onerror="this.style.display='none'">
+            <img src="images/longhorn-res3.png" alt="Исследование 3" class="case-image" onerror="this.style.display='none'">
+            <img src="images/longhorn-res4.png" alt="Исследование 4" class="case-image" onerror="this.style.display='none'">
+            <img src="images/longhorn-res5.png" alt="Исследование 5" class="case-image" onerror="this.style.display='none'">
+            <img src="images/longhorn-res6.png" alt="Исследование 6" class="case-image" onerror="this.style.display='none'">
+        </div>
+
+        <h2>Гипотезы</h2>
+        <ul>
+            <li>Если приложение проверяет несовместимость лекарств, доверие пользователей растёт</li>
+            <li>Если дозировка и график приёма задаются сразу при добавлении, ошибок становится меньше</li>
+            <li>Если пользователь видит шкалу прогресса курса, вероятность завершить лечение повышается</li>
+            <li>Если поиск препарата работает по названию и штрихкоду, время добавления сокращается вдвое</li>
+        </ul>
+
+        <h2>Пользовательские сценарии (User Flow)</h2>
+        <img src="images/longhorn-flow.png" alt="User Flow" class="case-image" onerror="this.style.display='none'">
+
+        <h2>Вайрфреймы</h2>
+        <p>На первом этапе спроектировал низкодетализированные вайрфреймы, чтобы протестировать информационную архитектуру и логику переходов.</p>
+        <div class="image-grid">
+            <img src="images/longhorn-wireframe1.png" alt="Wireframe 1" class="case-image" onerror="this.style.display='none'">
+            <img src="images/longhorn-wireframe2.png" alt="Wireframe 2" class="case-image" onerror="this.style.display='none'">
+        </div>
+
+        <h2>Визуальный стиль</h2>
+        <p>После тестирования структуры выбрана концепция тёплого минимализма: мягкие мятно-песочные оттенки, деликатные тени и скруглённые формы. Отказ от тревожных медицинских символов и красных акцентов создаёт ощущение спокойствия и заботы.</p>
+
+        <h3>Экран приветствия</h3>
+        <p>Лаконичная иллюстрация, которая адаптируется под текущее время суток.</p>
+        <img src="images/longhorn-welcome.png" alt="Экран приветствия" class="case-image" onerror="this.style.display='none'">
+
+        <h3>Главный экран</h3>
+        <p>Позволяет мгновенно переключаться между профилями и видеть статус приёма на сегодня.</p>
+        <img src="images/longhorn-main.png" alt="Главный экран" class="case-image" onerror="this.style.display='none'">
+
+        <h3>Добавление приёма</h3>
+        <div class="image-grid">
+            <img src="images/longhorn-onb1.png" alt="Онбординг 1" class="case-image" onerror="this.style.display='none'">
+            <img src="images/longhorn-onb2.png" alt="Онбординг 2" class="case-image" onerror="this.style.display='none'">
+        </div>
+
+        <h3>Календарь курса</h3>
+        <img src="images/longhorn-calendar.png" alt="Календарь" class="case-image" onerror="this.style.display='none'">
+
+        <h3>Список препаратов и экстренный экран</h3>
+        <img src="images/longhorn-list.png" alt="Список препаратов" class="case-image" onerror="this.style.display='none'">
+
+        <h2>UI-Kit</h2>
+        <p>Сбалансированная палитра в приглушённых оттенках создаёт ощущение комфорта и сохраняет высокую контрастность текста.</p>
+        <img src="images/longhorn-uikit.png" alt="UI Kit" class="case-image" onerror="this.style.display='none'">
+
+        <h2>Итог</h2>
+        <p>Интерфейс <strong>Longhorn</strong> получился спокойным, понятным и дружелюбным. Он снимает тревожность, помогает держать курс под контролем и снижает когнитивную нагрузку при регулярном приёме лекарств.</p>
+
+        <h3>Результаты тестирования с респондентами:</h3>
+        <ul>
+            <li>80% участников отметили лёгкость ориентации в структуре разделов</li>
+            <li>100% участников положительно оценили чистый визуальный стиль без лишних элементов</li>
+            <li>100% участников успешно добавили новый препарат менее чем за минуту</li>
+        </ul>
+    </div>
+
+    <!-- Lightbox Overlay -->
+    <div class="lightbox" id="lightbox">
+        <img src="" alt="Увеличенное изображение">
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = lightbox.querySelector('img');
+        const images = document.querySelectorAll('.case-image');
+
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

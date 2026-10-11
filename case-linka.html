@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Линка. смотри - Кейс</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=4">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4">
+    <link rel="apple-touch-icon" href="favicon.png?v=4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #1f1f1f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 5%; }
+        
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 40px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .back-link-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            flex-shrink: 0;
+            transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .back-link-icon svg {
+            width: 17px;
+            height: 17px;
+            display: block;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .back-link:hover .back-link-icon {
+            background-color: #ffffff;
+            color: #000000;
+            transform: translateX(-4px);
+        }
+
+        .back-link:hover .back-link-icon svg {
+            transform: translateX(-2px);
+        }
+
+        .back-link:active .back-link-icon {
+            transform: scale(0.94);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            line-height: 1.25;
+            margin: 48px 0 20px;
+            color: #ffffff;
+            letter-spacing: -0.025em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.35;
+            margin: 32px 0 16px;
+            color: #ffffff;
+            letter-spacing: -0.015em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        p {
+            color: #cccccc;
+            margin-bottom: 24px;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 68ch;
+            text-wrap: pretty;
+            overflow-wrap: break-word;
+        }
+
+        ul, ol {
+            color: #cccccc;
+            margin-bottom: 24px;
+            padding-left: 20px;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 68ch;
+        }
+
+        li {
+            margin-bottom: 12px;
+            text-wrap: pretty;
+        }
+
+        strong { color: #ffffff; font-weight: 600; }
+        
+        .role-block { background: var(--accent); padding: 24px; border-radius: 16px; margin: 32px 0; }
+        .role-block p { margin-bottom: 8px; font-size: 1rem; }
+        .role-block p:last-child { margin-bottom: 0; }
+        
+        .case-image { 
+            width: 100%; 
+            border-radius: 16px; 
+            margin: 32px 0; 
+            display: block; 
+            background: var(--accent); 
+            min-height: 200px; /* Placeholder height if image fails to load */
+            object-fit: cover;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .image-grid .case-image {
+            margin: 0;
+        }
+
+        @media (max-width: 600px) {
+            .image-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Lightbox Styles */
+        .case-image { cursor: zoom-in; }
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(13, 13, 13, 0.95);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000; cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+        .lightbox.active { opacity: 1; pointer-events: all; }
+        .lightbox img {
+            max-width: 95vw; max-height: 95vh; border-radius: 12px;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+        .lightbox.active img { transform: scale(1); }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <a href="index.html" class="back-link">
+            <span class="back-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </span>
+            <span>Назад к проектам</span>
+        </a>
+        
+        <h1>Линка. смотри: Приложение для альтернативной коммуникации</h1>
+        
+        <!-- Обложка -->
+        <img src="images/linka-cover.png" alt="Обложка Линка" class="case-image" onerror="this.style.display='none'">
+
+        <div class="role-block">
+            <p><strong>Моя роль:</strong> UX/UI дизайнер (проект ради общественного блага). Работа в распределенной команде.</p>
+            <p><strong>Стек:</strong> Figma (Auto Layout, компонентная архитектура)</p>
+        </div>
+
+        <h2>О проекте</h2>
+        <p>Бесплатная программа для общения, обучения и диагностики людей с тяжёлыми нарушениями речи и моторики (ДЦП, БАС, аутизм). Интерфейсом можно управлять взглядом через айтрекер Tobii, а также с помощью мыши, клавиатуры или специализированного джойстика.</p>
+
+        <h2>В чём была главная сложность</h2>
+        
+        <div class="image-grid">
+            <img src="images/linka-grid1.png" alt="Сложность 1" class="case-image" onerror="this.style.display='none'">
+            <img src="images/linka-grid2.png" alt="Сложность 2" class="case-image" onerror="this.style.display='none'">
+        </div>
+
+        <p>Стандартные интерфейсные паттерны здесь не работают: пользователь управляет экраном только фиксацией взгляда или нажатием единственной кнопки-триггера.</p>
+        <p>Необходимо было объединить потребности двух разных групп пользователей:</p>
+        <ol>
+            <li><strong>Пользователи программы:</strong> чистый экран с максимальной контрастностью без визуального шума, где физически сложно промахнуться мимо целевой карточки.</li>
+            <li><strong>Родители и специалисты:</strong> простой «Редактор наборов», позволяющий человеку без технических навыков быстро добавлять карточки, загружать изображения и настраивать озвучку.</li>
+        </ol>
+
+        <h2>Моя зона ответственности</h2>
+        
+        <img src="images/linka-main-window.png" alt="Основное окно пользователя" class="case-image" onerror="this.style.display='none'">
+
+        <p>Фокусировался на прозрачной логике продукта, масштабируемости дизайн-системы и удобстве передачи макетов в разработку:</p>
+        <ul>
+            <li><strong>Сценарии взаимодействия (User Flows):</strong> спроектировал путь создания карточек и тонкую настройку специфических параметров — задержки взгляда для айтрекера и таймингов сканирования для кнопок.</li>
+            <li><strong>Компонентная архитектура в Figma:</strong> выстроил масштабируемую библиотеку на Auto Layout, позволившую гибко варьировать плотность сетки (от 2 до 100 карточек на экран) без нарушения вёрстки.</li>
+            <li><strong>Микроинтеракции:</strong> проработал состояния фокуса, таймер удержания взгляда и подтверждение выбора для различных способов ввода.</li>
+        </ul>
+
+        <h2>Ключевые решения</h2>
+
+        <img src="images/linka-preview.png" alt="Предпросмотр набора" class="case-image" onerror="this.style.display='none'">
+
+        <ul>
+            <li><strong>Эргономика и доступность (A11y):</strong> увеличенные области нажатия и комфортные отступы компенсируют тремор и непроизвольные движения глаз. На экране оставлены только функциональные элементы.</li>
+            <li><strong>Адаптация под механику ввода:</strong> для айтрекеров внедрён круговой индикатор фиксации взгляда, для клавиатур и кнопок — пошаговое сканирование строк с подсветкой активного элемента.</li>
+            <li><strong>Простой конструктор для близких:</strong> редактор позволяет за пару минут собрать коммуникационную таблицу, привязать синтезатор речи или записать живой голос.</li>
+        </ul>
+
+        <h2>Результат</h2>
+        
+        <img src="images/linka-result.png" alt="Результат" class="case-image" onerror="this.style.display='none'">
+
+        <p>Команда выпустила доступный цифровой инструмент, который помогает людям с ограниченными возможностями здоровья общаться с окружающими. Разработанная система компонентов ускорила развитие продукта и передачу макетов в разработку.</p>
+    </div>
+
+    <!-- Lightbox Overlay -->
+    <div class="lightbox" id="lightbox">
+        <img src="" alt="Увеличенное изображение">
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = lightbox.querySelector('img');
+        const images = document.querySelectorAll('.case-image');
+
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

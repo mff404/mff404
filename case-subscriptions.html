@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Менеджер подписок - Кейс</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=4">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4">
+    <link rel="apple-touch-icon" href="favicon.png?v=4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #1f1f1f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 5%; }
+        
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 40px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .back-link-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            flex-shrink: 0;
+            transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .back-link-icon svg {
+            width: 17px;
+            height: 17px;
+            display: block;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+
+        .back-link:hover .back-link-icon {
+            background-color: #ffffff;
+            color: #000000;
+            transform: translateX(-4px);
+        }
+
+        .back-link:hover .back-link-icon svg {
+            transform: translateX(-2px);
+        }
+
+        .back-link:active .back-link-icon {
+            transform: scale(0.94);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            line-height: 1.25;
+            margin: 48px 0 20px;
+            color: #ffffff;
+            letter-spacing: -0.025em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.35;
+            margin: 32px 0 16px;
+            color: #ffffff;
+            letter-spacing: -0.015em;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        p {
+            color: #cccccc;
+            margin-bottom: 24px;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 68ch;
+            text-wrap: pretty;
+            overflow-wrap: break-word;
+        }
+
+        ul, ol {
+            color: #cccccc;
+            margin-bottom: 24px;
+            padding-left: 20px;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            max-width: 68ch;
+        }
+
+        li {
+            margin-bottom: 12px;
+            text-wrap: pretty;
+        }
+
+        strong { color: #ffffff; font-weight: 600; }
+        blockquote { border-left: 4px solid var(--text-secondary); padding-left: 16px; margin: 24px 0; color: #aaa; font-style: italic; }
+        
+        .role-block { background: var(--accent); padding: 24px; border-radius: 16px; margin: 32px 0; }
+        .role-block p { margin-bottom: 8px; font-size: 1rem; }
+        .role-block p:last-child { margin-bottom: 0; }
+        
+        /* Lightbox Styles */
+        .case-image { 
+            width: 100%; 
+            border-radius: 16px; 
+            margin: 32px 0; 
+            display: block; 
+            background: var(--accent); 
+            min-height: 200px; 
+            object-fit: cover;
+            cursor: zoom-in; 
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .image-grid .case-image { margin: 0; }
+
+        @media (max-width: 600px) {
+            .image-grid { grid-template-columns: 1fr; }
+        }
+        
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(13, 13, 13, 0.95);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000; cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+        .lightbox.active { opacity: 1; pointer-events: all; }
+        .lightbox img {
+            max-width: 95vw; max-height: 95vh; border-radius: 12px;
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+        .lightbox.active img { transform: scale(1); }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <a href="index.html" class="back-link">
+            <span class="back-link-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </span>
+            <span>Назад к проектам</span>
+        </a>
+        
+        <h1>Менеджер подписок</h1>
+        
+        <p>Это мобильное приложение, которое помогает пользователям контролировать все свои платные подписки в одном месте. Оно напоминает о предстоящих списаниях, показывает общие траты и помогает избежать неожиданных расходов.</p>
+        <p>Цель проекта — сделать управление подписками <strong>простым, прозрачным и визуально понятным</strong>.</p>
+        
+        <!-- Обложка -->
+        <img src="images/sub-cover.png" alt="Обложка приложения" class="case-image" onerror="this.style.display='none'">
+
+        <h2>Проблема</h2>
+        <p>У активных пользователей часто оформлены десятки подписок: от медиасервисов до софта и курсов. Контролировать списания становится сложно: люди забывают отменять ненужные тарифы и регулярно переплачивают.</p>
+        <p>Цель проекта — создать прозрачный инструмент, который собирает все регулярные траты в одном месте и помогает легко ими управлять.</p>
+
+        <h2>Целевая аудитория</h2>
+        <ul>
+            <li><strong>Студенты и молодые специалисты (18–25 лет).</strong> Активно пробуют пробные периоды платных сервисов для учёбы и развлечений. Ценят контроль расходов и своевременные напоминания об отмене подписок.</li>
+            <li><strong>Семейные пользователи (25–45 лет).</strong> Управляют несколькими домашними подписками на медиа и полезные сервисы. Ищут единое место для контроля семейного бюджета.</li>
+            <li><strong>IT-специалисты и фрилансеры (25–40 лет).</strong> Используют множество профессиональных облачных инструментов. Хотят централизованно отслеживать даты и суммы продления лицензий.</li>
+        </ul>
+
+        <h2>Исследование</h2>
+        <p>Анализ конкурентных решений показал ключевые потребности аудитории:</p>
+        <ul>
+            <li>Простая и прозрачная навигация без перегруженных меню.</li>
+            <li>Мгновенная видимость статуса каждой подписки на первом экране.</li>
+            <li>Минималистичный первый шаг для быстрого старта работы без сложных настроек.</li>
+        </ul>
+
+        <div class="image-grid">
+            <img src="images/sub-research1.png" alt="Исследование 1" class="case-image" onerror="this.style.display='none'">
+            <img src="images/sub-research2.png" alt="Исследование 2" class="case-image" onerror="this.style.display='none'">
+        </div>
+
+        <h2>Проверка гипотез и интервью с респондентами</h2>
+        <p>После проработки пользовательских путей сформулированы гипотезы о поиске, визуальной идентификации и навигации. Для их проверки проведены глубинные интервью с потенциальными пользователями.</p>
+        
+        <img src="images/sub-hypotheses.png" alt="Гипотезы" class="case-image" onerror="this.style.display='none'">
+
+        <h3>Гипотеза 1. Исправление опечаток при поиске</h3>
+        <blockquote>Если при вводе названия система предлагает варианты автокоррекции (например, при запросе «Netfli» подсказывает «Netflix»), время поиска сокращается, а количество повторных запросов снижается.</blockquote>
+        <p><strong>Результат:</strong> подтвердилась.</p>
+        <p><strong>Решение:</strong> реализован «умный» поиск с подсказками и автоисправлением ошибок.</p>
+
+        <h3>Гипотеза 2. Фильтрация по категориям</h3>
+        <blockquote>Категории (музыка, видео, образование, софт) помогают пользователям быстрее ориентироваться в длинном списке подписок.</blockquote>
+        <p><strong>Результат:</strong> подтвердилась.</p>
+        <p><strong>Решение:</strong> внедрены удобные фильтры-чипсы в верхней части экрана.</p>
+
+        <h3>Гипотеза 3. Минималистичный стиль (Flat Design)</h3>
+        <blockquote>Простые чистые формы, минимум шума и спокойная палитра повышают доверие к финансовому приложению.</blockquote>
+        <p><strong>Результат:</strong> подтвердилась частично.</p>
+        <p><strong>Решение:</strong> сохранён общий минимализм, но добавлены контрастные фокусные акценты на ключевых действиях.</p>
+
+        <h3>Гипотеза 4. Фирменные цвета сервисов</h3>
+        <blockquote>Использование узнаваемых логотипов и фирменных оттенков ускоряет сканирование списка за счёт зрительных ассоциаций.</blockquote>
+        <p><strong>Результат:</strong> подтвердилась.</p>
+        <p><strong>Решение:</strong> карточки подписок сочетают официальный логотип сервиса и его фирменный цветовой акцент.</p>
+
+        <h3>Выводы исследования</h3>
+        <p>Интервью подтвердили, что пользователям необходимы:</p>
+        <ul>
+            <li>Поиск с автоисправлением опечаток и быстрыми подсказками</li>
+            <li>Категории для наглядной группировки расходов</li>
+            <li>Минималистичный интерфейс с чёткими визуальными приоритетами</li>
+            <li>Узнаваемые логотипы и брендовые цвета сервисов</li>
+        </ul>
+        <p>Эти решения легли в основу финального дизайна.</p>
+
+        <h2>Пользовательские сценарии (User Flow)</h2>
+        <img src="images/sub-flow.png" alt="User Flow" class="case-image" onerror="this.style.display='none'">
+
+        <h2>Вайрфреймы</h2>
+        <p>На начальном этапе разработаны низкодетализированные экраны для валидации информационной архитектуры и ключевых переходов.</p>
+        <img src="images/sub-wireframes.png" alt="Wireframes" class="case-image" onerror="this.style.display='none'">
+
+        <h2>Визуальный стиль</h2>
+        <p>Интерфейс построен на принципах лёгкого минимализма: светлые поверхности, мягкие тени и скруглённые элементы. Вдохновением для палитры послужил культовый телефон Sony Ericsson W800i — тёплая молочная база в сочетании с энергичным оранжевым акцентом.</p>
+        <img src="images/sub-visual.png" alt="Визуальный стиль" class="case-image" onerror="this.style.display='none'">
+
+        <h2>UI-Кит</h2>
+        <img src="images/sub-uikit.png" alt="UI Kit" class="case-image" onerror="this.style.display='none'">
+
+        <h2>Итоги проекта</h2>
+        <p>Создан простой и визуально чистый сервис для управления подписками, который помогает держать расходы под полным контролем.</p>
+        <p>Ключевые результаты:</p>
+        <ul>
+            <li>Спроектирован интуитивный сценарий добавления сервиса</li>
+            <li>Выстроена лёгкая визуальная система без перегруженности</li>
+            <li>Продуманы состояния для аналитики и первого запуска (empty state)</li>
+        </ul>
+    </div>
+
+    <!-- Lightbox Overlay -->
+    <div class="lightbox" id="lightbox">
+        <img src="" alt="Увеличенное изображение">
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = lightbox.querySelector('img');
+        const images = document.querySelectorAll('.case-image');
+
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

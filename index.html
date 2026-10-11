@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фаниль - Product Designer</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=4">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4">
+    <link rel="apple-touch-icon" href="favicon.png?v=4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Exact fun.xyz Design System Tokens */
+            --bg-color: #0d0d0d;
+            --gray-1: #0d0d0d;
+            --gray-2: #191919;
+            --gray-3: #222222;
+            --gray-4: #292929;
+            --gray-5: #313131;
+            --gray-6: #3a3a3a;
+            --gray-10: #999999;
+            --gray-11: #b3b3b3;
+            --gray-12: #eeeeee;
+
+            --alpha-1: rgba(255, 255, 255, 0.02);
+            --alpha-2: rgba(255, 255, 255, 0.04);
+            --alpha-3: rgba(255, 255, 255, 0.07);
+            --alpha-4: rgba(255, 255, 255, 0.1);
+            --alpha-6: rgba(255, 255, 255, 0.17);
+            --alpha-9: rgba(255, 255, 255, 0.39);
+            --alpha-11: rgba(255, 255, 255, 0.68);
+            --alpha-12: #ffffff;
+
+            --radius-20: 1.25rem;
+            --ease-fun: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--alpha-12);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 {
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        p {
+            text-wrap: pretty;
+            overflow-wrap: break-word;
+        }
+
+        a {
+            text-underline-position: from-font;
+            text-decoration-thickness: from-font;
+        }
+
+        /* Tabular numbers for clean alignment */
+        .tabular-num {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s var(--ease-fun), transform 0.8s var(--ease-fun);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* Header (fun.xyz nav_component) */
+        header {
+            width: 100%;
+            position: sticky;
+            top: 0;
+            background-color: rgba(13, 13, 13, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: none;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 5%;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            color: var(--alpha-12);
+            text-decoration: none;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background-color: var(--gray-3);
+            color: var(--alpha-12);
+            text-decoration: none;
+            padding: 7px 16px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.45;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.25s var(--ease-fun),
+                        color 0.25s var(--ease-fun),
+                        transform 0.15s var(--ease-fun);
+        }
+
+        .header-pill:hover {
+            background-color: var(--gray-4);
+            color: #ffffff;
+        }
+
+        .header-pill:active {
+            transform: scale(0.96);
+        }
+
+        /* Анимация стрелки Telegram (из ↗ в → при наведении) */
+        .header-arrow {
+            width: 13px;
+            height: 13px;
+            display: block;
+            transition: transform 0.35s var(--ease-fun);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .header-pill.tg-btn:hover .header-arrow {
+                transform: rotate(45deg);
+            }
+        }
+
+        /* Иконка Email (Copy / Check) */
+        .email-btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            position: relative;
+        }
+
+        .email-btn-icon svg {
+            width: 13px;
+            height: 13px;
+            display: block;
+            transition: opacity 0.2s var(--ease-fun), transform 0.2s var(--ease-fun);
+        }
+
+        .email-btn-icon .icon-check {
+            display: none;
+            color: #ffffff;
+        }
+
+        /* Состояние после копирования */
+        .header-pill.copied {
+            background-color: var(--gray-4);
+            color: #ffffff;
+        }
+
+        .header-pill.copied .email-btn-icon .icon-copy {
+            display: none;
+        }
+
+        .header-pill.copied .email-btn-icon .icon-check {
+            display: block;
+            animation: popIn 0.25s var(--ease-fun);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Hero */
+        .hero {
+            padding: 100px 0 120px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3.2rem, 7vw, 5.8rem);
+            font-weight: 500;
+            line-height: 1.05;
+            letter-spacing: -0.035em;
+            margin-bottom: 24px;
+            max-width: 900px;
+            color: var(--alpha-12);
+        }
+
+        .hero p {
+            font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+            line-height: 1.55;
+            color: var(--gray-10);
+            max-width: 65ch;
+            margin-bottom: 32px;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hero-tag {
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            color: var(--gray-11);
+            background-color: var(--gray-2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            user-select: none;
+            transition: background-color 0.45s var(--ease-fun), color 0.45s var(--ease-fun);
+        }
+
+        .hero-tag:hover {
+            background-color: var(--gray-3);
+            color: var(--alpha-12);
+        }
+
+        /* Segmented Control with Sliding Pill Indicator (Apple/Emil Kowalski pattern) */
+        .controls-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 40px;
+        }
+
+        .segment-control {
+            position: relative;
+            display: inline-flex;
+            background-color: var(--gray-2);
+            padding: 4px;
+            border-radius: 999px;
+            user-select: none;
+            isolation: isolate;
+        }
+
+        .segment-indicator {
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: 0;
+            background-color: var(--gray-4);
+            border-radius: 999px;
+            z-index: 1;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1), 
+                        width 260ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .segment-btn {
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            border: none;
+            color: var(--gray-10);
+            padding: 8px 22px;
+            border-radius: 999px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            -webkit-tap-highlight-color: transparent;
+            transition: color 200ms ease-out, transform 120ms ease-out;
+        }
+
+        .segment-btn:hover {
+            color: var(--alpha-12);
+        }
+
+        .segment-btn:active {
+            transform: scale(0.96);
+        }
+
+        .segment-btn.active {
+            color: var(--alpha-12);
+        }
+
+        /* Cases Grid (fun.xyz cards) */
+        .cases {
+            padding: 40px 0 100px;
+        }
+
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px) scale(0.99);
+            transition: opacity 280ms cubic-bezier(0.23, 1, 0.32, 1), 
+                        transform 280ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+
+        @media (max-width: 860px) {
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        /* Works Grid (Gallery Only) */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 860px) {
+            .works-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .work-item {
+            width: 100%;
+            aspect-ratio: 16 / 10.5;
+            border-radius: var(--radius-20);
+            overflow: hidden;
+            background-color: var(--gray-2);
+            position: relative;
+            cursor: zoom-in;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            transition: transform 0.4s var(--ease-fun), background-color 0.4s var(--ease-fun);
+        }
+
+        .work-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
+            transition: transform 0.5s var(--ease-fun);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .work-item:hover {
+                transform: translateY(-4px);
+                background-color: #202020;
+            }
+
+            .work-item:hover img {
+                transform: scale(1.04);
+            }
+        }
+
+        /* Fullscreen Lightbox */
+        /* Fullscreen Lightbox with Scroll Support for Long Mockups */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 13, 13, 0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s var(--ease-fun);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-close-btn {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: var(--gray-3);
+            border: 1px solid var(--alpha-3);
+            color: var(--alpha-12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1020;
+            transition: background-color 0.25s var(--ease-fun), transform 0.25s var(--ease-fun);
+        }
+
+        .lightbox-close-btn:hover {
+            background-color: var(--gray-4);
+            transform: scale(1.06);
+        }
+
+        @media (max-width: 640px) {
+            .lightbox-close-btn {
+                top: 16px;
+                right: 16px;
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        .lightbox-scroll {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 60px 24px 80px;
+            cursor: zoom-out;
+        }
+
+        /* Если картинка стандартная (не длинный лендинг), центрируем по вертикали */
+        .lightbox.is-contained .lightbox-scroll {
+            align-items: center;
+            padding: 24px;
+        }
+
+        .lightbox-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: auto;
+            max-width: 100%;
+            margin: 0 auto;
+            cursor: zoom-out;
+        }
+
+        .lightbox.is-contained .lightbox-inner {
+            margin: auto;
+        }
+
+        .lightbox-inner img {
+            width: 100%;
+            height: auto;
+            max-width: 1000px;
+            border-radius: 16px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+            transform: scale(0.97);
+            transition: transform 0.35s var(--ease-fun);
+            display: block;
+            cursor: default;
+        }
+
+        .lightbox.active .lightbox-inner img {
+            transform: scale(1);
+        }
+
+        .lightbox.is-contained .lightbox-inner img {
+            max-width: 92vw;
+            max-height: 90vh;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* fun.xyz card architecture */
+        .case-card {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--gray-2);
+            border-radius: var(--radius-20);
+            padding: 20px;
+            text-decoration: none;
+            color: var(--alpha-12);
+            border: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.45s var(--ease-fun),
+                        transform 0.45s var(--ease-fun);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .case-card:hover {
+                background-color: #202020;
+                transform: translateY(-4px);
+            }
+        }
+
+        .case-card:active {
+            transform: scale(0.99);
+        }
+
+        .case-visual {
+            width: 100%;
+            aspect-ratio: 16 / 10.5;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: var(--gray-1);
+            margin-bottom: 20px;
+            position: relative;
+            border: none;
+            /* Предотвращает размытие при трансформациях в браузерах */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        .case-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
+            transform: scale(1.01);
+            transition: transform 0.5s var(--ease-fun), filter 0.5s var(--ease-fun);
+            filter: contrast(1.04) brightness(1.02);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .case-card:hover .case-visual img {
+                transform: scale(1.05);
+                filter: contrast(1.06) brightness(1.04);
+            }
+        }
+
+        .case-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .case-badge {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--gray-11);
+            background-color: var(--alpha-3);
+            border-radius: 999px;
+            padding: 4px 12px;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+
+        .case-arrow-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: var(--gray-3);
+            border: none;
+            color: var(--gray-12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background-color 0.4s var(--ease-fun), 
+                        color 0.4s var(--ease-fun),
+                        transform 0.4s var(--ease-fun);
+        }
+
+        .case-arrow-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.4s var(--ease-fun);
+            display: block;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .case-card:hover .case-arrow-btn {
+                background-color: var(--gray-12);
+                color: #000000;
+                transform: scale(1.05);
+            }
+
+            /* поворот стрелки вправо на 45 градусов (из ↗ в →) */
+            .case-card:hover .case-arrow-btn svg {
+                transform: rotate(45deg);
+            }
+        }
+
+        .case-card h3 {
+            font-size: 1.45rem;
+            font-weight: 500;
+            letter-spacing: -0.025em;
+            line-height: 1.25;
+            margin-bottom: 8px;
+            color: var(--alpha-12);
+        }
+
+        .case-card p {
+            color: var(--gray-10);
+            font-size: 0.9375rem;
+            line-height: 1.55;
+            letter-spacing: -0.005em;
+        }
+
+
+
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in {
+                transform: none !important;
+                transition: opacity 0.3s ease !important;
+            }
+            .case-card, .btn, .case-card .case-arrow-btn {
+                transition-duration: 0.1s !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-inner">
+            <a href="#" class="logo">Фаниль</a>
+            <nav class="header-nav">
+                <a href="https://t.me/mff404" target="_blank" rel="noopener noreferrer" class="header-pill tg-btn">
+                    <span>Telegram</span>
+                    <svg class="header-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </a>
+                <button type="button" class="header-pill email-btn" id="headerCopyEmail" aria-label="Скопировать email">
+                    <span class="email-btn-text">Email</span>
+                    <span class="email-btn-icon" aria-hidden="true">
+                        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero fade-in">
+            <h1>Product Designer</h1>
+            <p>Проектирую и создаю удобные цифровые продукты: от исследований до рабочих прототипов.</p>
+            <div class="hero-tags">
+                <span class="hero-tag">Product Design</span>
+                <span class="hero-tag">UX Research</span>
+                <span class="hero-tag">Design Engineer</span>
+            </div>
+        </section>
+
+        <section id="work" class="cases fade-in">
+            <div class="controls-wrapper">
+                <div class="segment-control" role="tablist">
+                    <div class="segment-indicator" aria-hidden="true"></div>
+                    <button class="segment-btn active" role="tab" aria-selected="true" data-tab="cases">Кейсы</button>
+                    <button class="segment-btn" role="tab" aria-selected="false" data-tab="works">Концепты</button>
+                </div>
+            </div>
+
+            <!-- Вкладка 1: Кейсы -->
+            <div id="tab-cases" class="tab-content active is-visible">
+                <div class="grid">
+                    <a href="case-linka.html" class="case-card">
+                        <div class="case-visual">
+                            <img src="images/linka-thumb.png" alt="Линка. смотри" loading="lazy">
+                        </div>
+                        <div class="case-meta">
+                            <span class="case-badge">Social Tech · A11y</span>
+                            <div class="case-arrow-btn" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Линка. смотри</h3>
+                        <p>Приложение для альтернативной коммуникации людей с нарушениями речи и моторики</p>
+                    </a>
+
+                    <a href="case-tortuga.html" class="case-card">
+                        <div class="case-visual">
+                            <img src="images/tortuga-thumb.png" alt="Tortuga Bank" loading="lazy">
+                        </div>
+                        <div class="case-meta">
+                            <span class="case-badge">Fintech · B2B</span>
+                            <div class="case-arrow-btn" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Tortuga Bank</h3>
+                        <p>Дизайн главного экрана финансового кабинета для бизнеса в десктопной и мобильной версиях</p>
+                    </a>
+                    
+                    <a href="case-dashboard.html" class="case-card">
+                        <div class="case-visual">
+                            <img src="images/dashboard-thumb.png" alt="B2B-дашборд (eCommerce)" loading="lazy">
+                        </div>
+                        <div class="case-meta">
+                            <span class="case-badge">eCommerce · Analytics</span>
+                            <div class="case-arrow-btn" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>B2B-дашборд (eCommerce)</h3>
+                        <p>Оптимизация работы склада, продуктовые метрики, аналитика и внедрение JTBD-подхода</p>
+                    </a>
+
+                    <a href="case-longhorn.html" class="case-card">
+                        <div class="case-visual">
+                            <img src="images/longhorn-thumb.png" alt="Longhorn" loading="lazy">
+                        </div>
+                        <div class="case-meta">
+                            <span class="case-badge">HealthTech · Mobile</span>
+                            <div class="case-arrow-btn" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Longhorn</h3>
+                        <p>Мобильное приложение для соблюдения курса лечения и контроля приёма лекарств</p>
+                    </a>
+
+                    <a href="case-subscriptions.html" class="case-card">
+                        <div class="case-visual">
+                            <img src="images/sub-thumb.png" alt="Менеджер подписок" loading="lazy">
+                        </div>
+                        <div class="case-meta">
+                            <span class="case-badge">Finance · iOS</span>
+                            <div class="case-arrow-btn" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3>Менеджер подписок</h3>
+                        <p>Мобильное приложение для контроля регулярных подписок и управления личными расходами</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Вкладка 2: Работы (только графика с зумом) -->
+            <div id="tab-works" class="tab-content">
+                <div class="works-grid">
+                    <div class="work-item">
+                        <img src="images/work1.png" alt="Работа 1" class="zoomable-img" loading="lazy">
+                    </div>
+                    <div class="work-item">
+                        <img src="images/work2.png" alt="Работа 2" class="zoomable-img" loading="lazy">
+                    </div>
+                    <div class="work-item">
+                        <img src="images/work3.png" alt="Работа 3" class="zoomable-img" loading="lazy">
+                    </div>
+                    <div class="work-item">
+                        <img src="images/work4.png" alt="Работа 4" class="zoomable-img" loading="lazy">
+                    </div>
+                    <div class="work-item">
+                        <img src="images/work5.png" alt="Работа 5" class="zoomable-img" loading="lazy">
+                    </div>
+                    <div class="work-item">
+                        <img src="images/work6.png" alt="Работа 6" class="zoomable-img" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Fullscreen Lightbox Overlay -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+        <button class="lightbox-close-btn" id="lightboxClose" aria-label="Закрыть">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="lightbox-scroll" id="lightboxScroll">
+            <div class="lightbox-inner" id="lightboxInner">
+                <img src="" alt="Увеличенное изображение" id="lightboxImg">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll implementation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Segmented Control tab switcher with sliding indicator
+        const segmentControl = document.querySelector('.segment-control');
+        const indicator = document.querySelector('.segment-indicator');
+        const segmentBtns = document.querySelectorAll('.segment-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        function updateIndicator(btn) {
+            if (!indicator || !btn) return;
+            const btnRect = btn.getBoundingClientRect();
+            const parentRect = segmentControl.getBoundingClientRect();
+            const offsetLeft = btnRect.left - parentRect.left;
+            indicator.style.transform = `translateX(${offsetLeft}px)`;
+            indicator.style.width = `${btnRect.width}px`;
+        }
+
+        // Initialize indicator position
+        const initialActiveBtn = document.querySelector('.segment-btn.active');
+        if (initialActiveBtn) {
+            updateIndicator(initialActiveBtn);
+        }
+
+        window.addEventListener('resize', () => {
+            const currentActive = document.querySelector('.segment-btn.active');
+            if (currentActive) updateIndicator(currentActive);
+        });
+
+        segmentBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('active')) return;
+
+                segmentBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+
+                updateIndicator(btn);
+
+                // Smooth tab content transition
+                const currentTab = document.querySelector('.tab-content.active');
+                const targetTab = document.getElementById(`tab-${btn.dataset.tab}`);
+
+                if (currentTab) {
+                    currentTab.classList.remove('is-visible');
+                    setTimeout(() => {
+                        currentTab.classList.remove('active');
+                        if (targetTab) {
+                            targetTab.classList.add('active');
+                            // Force reflow for enter transition
+                            void targetTab.offsetWidth;
+                            targetTab.classList.add('is-visible');
+                        }
+                    }, 140);
+                } else if (targetTab) {
+                    targetTab.classList.add('active');
+                    void targetTab.offsetWidth;
+                    targetTab.classList.add('is-visible');
+                }
+            });
+        });
+
+        // Lightbox with smart ratio detection & full-page scrolling
+        const lightbox = document.getElementById('lightbox');
+        const lightboxScroll = document.getElementById('lightboxScroll');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const zoomableImgs = document.querySelectorAll('.zoomable-img');
+
+        function openLightbox(img) {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt || 'Работа';
+
+            // Проверяем пропорции изображения: если высота заметно превышает ширину (длинный лендинг)
+            const isTallLanding = (img.naturalHeight / img.naturalWidth) > 1.2;
+
+            if (isTallLanding) {
+                lightbox.classList.remove('is-contained');
+            } else {
+                lightbox.classList.add('is-contained');
+            }
+
+            if (lightboxScroll) {
+                lightboxScroll.scrollTop = 0;
+            }
+
+            lightbox.classList.add('active');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        zoomableImgs.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openLightbox(img);
+            });
+        });
+
+        // Закрытие при клике по любой темной области (вне самого изображения)
+        lightbox.addEventListener('click', (e) => {
+            // Клик по самому изображению не закрывает
+            if (e.target === lightboxImg) return;
+
+            // Предотвращаем закрытие при клике по нативному скроллбару справа
+            if (lightboxScroll && e.clientX >= lightboxScroll.clientWidth) {
+                return;
+            }
+
+            closeLightbox();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Add staggered delay to grid items
+        const caseCards = document.querySelectorAll('.case-card');
+        caseCards.forEach((card, index) => {
+            card.classList.add('fade-in');
+            card.style.transitionDelay = `${index * 0.08}s`;
+            observer.observe(card);
+        });
+
+        // Copy Email to clipboard with visual feedback
+        const copyEmailBtn = document.getElementById('headerCopyEmail');
+        if (copyEmailBtn) {
+            const emailText = copyEmailBtn.querySelector('.email-btn-text');
+            let copyTimeout = null;
+
+            function triggerCopiedFeedback() {
+                copyEmailBtn.classList.add('copied');
+                if (emailText) emailText.textContent = 'Скопировано';
+                
+                if (copyTimeout) clearTimeout(copyTimeout);
+                copyTimeout = setTimeout(() => {
+                    copyEmailBtn.classList.remove('copied');
+                    if (emailText) emailText.textContent = 'Email';
+                }, 1800);
+            }
+
+            copyEmailBtn.addEventListener('click', () => {
+                const email = 'fanilm@lenta.ru';
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(email)
+                        .then(triggerCopiedFeedback)
+                        .catch(() => fallbackCopy(email, triggerCopiedFeedback));
+                } else {
+                    fallbackCopy(email, triggerCopiedFeedback);
+                }
+            });
+        }
+
+        function fallbackCopy(text, callback) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try {
+                document.execCommand('copy');
+                if (callback) callback();
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            ta.remove();
+        }
+    </script>
+</body>
+</html>
