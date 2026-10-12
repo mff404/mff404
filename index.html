@@ -802,22 +802,28 @@
             <div id="tab-works" class="tab-content">
                 <div class="works-grid">
                     <div class="work-item">
-                        <img src="images/work1.png" alt="Работа 1" class="zoomable-img" loading="lazy">
+                        <img src="images/work1.png" alt="Концепт 1" class="zoomable-img" loading="lazy">
                     </div>
                     <div class="work-item">
-                        <img src="images/work2.png" alt="Работа 2" class="zoomable-img" loading="lazy">
+                        <img src="images/concept-deposit.png" alt="Концепт 2" class="zoomable-img" loading="lazy">
                     </div>
                     <div class="work-item">
-                        <img src="images/work3.png" alt="Работа 3" class="zoomable-img" loading="lazy">
+                        <img src="images/concept-gendir.png" alt="Концепт 3" class="zoomable-img" loading="lazy">
                     </div>
                     <div class="work-item">
-                        <img src="images/work4.png" alt="Работа 4" class="zoomable-img" loading="lazy">
+                        <img src="images/work2.png" alt="Концепт 4" class="zoomable-img" loading="lazy">
                     </div>
                     <div class="work-item">
-                        <img src="images/work5.png" alt="Работа 5" class="zoomable-img" loading="lazy">
+                        <img src="images/work3.png" alt="Концепт 5" class="zoomable-img" loading="lazy">
                     </div>
                     <div class="work-item">
-                        <img src="images/work6.png" alt="Работа 6" class="zoomable-img" loading="lazy">
+                        <img src="images/work4.png" alt="Концепт 6" class="zoomable-img" loading="lazy">
+                    </div>
+                    <div class="work-item">
+                        <img src="images/work5.png" alt="Концепт 7" class="zoomable-img" loading="lazy">
+                    </div>
+                    <div class="work-item">
+                        <img src="images/work6.png" alt="Концепт 8" class="zoomable-img" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -948,10 +954,10 @@
             document.body.style.overflow = '';
         }
 
-        zoomableImgs.forEach(img => {
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openLightbox(img);
+        document.querySelectorAll('.work-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const img = item.querySelector('.zoomable-img');
+                if (img) openLightbox(img);
             });
         });
 
