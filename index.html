@@ -382,7 +382,8 @@
             transition: transform 0.4s var(--ease-fun), background-color 0.4s var(--ease-fun);
         }
 
-        .work-item img {
+        .work-item img,
+        .work-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -393,14 +394,49 @@
             transition: transform 0.5s var(--ease-fun);
         }
 
+        .work-item-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(13, 13, 13, 0.72);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            padding: 5px 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #ffffff;
+            z-index: 2;
+            pointer-events: none;
+            letter-spacing: -0.01em;
+            transition: background-color 0.3s var(--ease-fun), border-color 0.3s var(--ease-fun);
+        }
+
+        .work-item-badge svg {
+            width: 10px;
+            height: 10px;
+            fill: #ffffff;
+            display: block;
+        }
+
         @media (hover: hover) and (pointer: fine) {
             .work-item:hover {
                 transform: translateY(-4px);
                 background-color: #202020;
             }
 
-            .work-item:hover img {
+            .work-item:hover img,
+            .work-item:hover video {
                 transform: scale(1.04);
+            }
+
+            .work-item:hover .work-item-badge {
+                background: rgba(22, 22, 22, 0.88);
+                border-color: rgba(255, 255, 255, 0.25);
             }
         }
 
@@ -493,23 +529,27 @@
             margin: auto;
         }
 
-        .lightbox-inner img {
+        .lightbox-inner img,
+        .lightbox-inner video {
             width: 100%;
             height: auto;
-            max-width: 1000px;
+            max-width: 1050px;
             border-radius: 16px;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
             transform: scale(0.97);
             transition: transform 0.35s var(--ease-fun);
             display: block;
             cursor: default;
+            outline: none;
         }
 
-        .lightbox.active .lightbox-inner img {
+        .lightbox.active .lightbox-inner img,
+        .lightbox.active .lightbox-inner video {
             transform: scale(1);
         }
 
-        .lightbox.is-contained .lightbox-inner img {
+        .lightbox.is-contained .lightbox-inner img,
+        .lightbox.is-contained .lightbox-inner video {
             max-width: 92vw;
             max-height: 90vh;
             width: auto;
@@ -798,9 +838,20 @@
                 </div>
             </div>
 
-            <!-- Вкладка 2: Работы (только графика с зумом) -->
+            <!-- Вкладка 2: Концепты (графика и видео с зумом) -->
             <div id="tab-works" class="tab-content">
                 <div class="works-grid">
+                    <div class="work-item" data-type="video" data-full-src="videos/concept-scada.mp4">
+                        <div class="work-item-badge" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                            </svg>
+                            <span>SCADA · Демо</span>
+                        </div>
+                        <video autoplay loop muted playsinline preload="auto">
+                            <source src="videos/concept-scada-preview.mp4" type="video/mp4">
+                        </video>
+                    </div>
                     <div class="work-item">
                         <img src="images/work1.png" alt="Концепт 1" class="zoomable-img" loading="lazy">
                     </div>
@@ -841,6 +892,7 @@
         <div class="lightbox-scroll" id="lightboxScroll">
             <div class="lightbox-inner" id="lightboxInner">
                 <img src="" alt="Увеличенное изображение" id="lightboxImg">
+                <video id="lightboxVideo" loop playsinline muted controls style="display: none;"></video>
             </div>
         </div>
     </div>
@@ -899,6 +951,7 @@
                 // Smooth tab content transition
                 const currentTab = document.querySelector('.tab-content.active');
                 const targetTab = document.getElementById(`tab-${btn.dataset.tab}`);
+                const isWorksTab = btn.dataset.tab === 'works';
 
                 if (currentTab) {
                     currentTab.classList.remove('is-visible');
@@ -909,34 +962,68 @@
                             // Force reflow for enter transition
                             void targetTab.offsetWidth;
                             targetTab.classList.add('is-visible');
+                            handleTabVideos(isWorksTab);
                         }
                     }, 140);
                 } else if (targetTab) {
                     targetTab.classList.add('active');
                     void targetTab.offsetWidth;
                     targetTab.classList.add('is-visible');
+                    handleTabVideos(isWorksTab);
                 }
             });
         });
 
-        // Lightbox with smart ratio detection & full-page scrolling
+        // Управление воспроизведением видео при переключении вкладок
+        function handleTabVideos(isWorksActive) {
+            document.querySelectorAll('.works-grid video').forEach(v => {
+                if (isWorksActive) {
+                    v.play().catch(() => {});
+                } else {
+                    v.pause();
+                }
+            });
+        }
+
+        // Lightbox with smart ratio detection, video support & full-page scrolling
         const lightbox = document.getElementById('lightbox');
         const lightboxScroll = document.getElementById('lightboxScroll');
         const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxVideo = document.getElementById('lightboxVideo');
         const lightboxClose = document.getElementById('lightboxClose');
-        const zoomableImgs = document.querySelectorAll('.zoomable-img');
 
-        function openLightbox(img) {
-            lightboxImg.src = img.src;
-            lightboxImg.alt = img.alt || 'Работа';
+        function openLightbox(mediaEl, fullSrc) {
+            const isVideo = mediaEl.tagName.toLowerCase() === 'video';
 
-            // Проверяем пропорции изображения: если высота заметно превышает ширину (длинный лендинг)
-            const isTallLanding = (img.naturalHeight / img.naturalWidth) > 1.2;
+            if (isVideo) {
+                lightboxImg.style.display = 'none';
+                lightboxVideo.style.display = 'block';
 
-            if (isTallLanding) {
-                lightbox.classList.remove('is-contained');
-            } else {
+                const src = fullSrc || mediaEl.currentSrc || (mediaEl.querySelector('source') ? mediaEl.querySelector('source').src : mediaEl.src);
+                if (lightboxVideo.src !== src) {
+                    lightboxVideo.src = src;
+                }
+                lightboxVideo.muted = true;
+                lightboxVideo.currentTime = mediaEl.currentTime || 0;
                 lightbox.classList.add('is-contained');
+                lightboxVideo.play().catch(() => {});
+            } else {
+                if (lightboxVideo) {
+                    lightboxVideo.pause();
+                    lightboxVideo.style.display = 'none';
+                }
+                lightboxImg.style.display = 'block';
+                lightboxImg.src = mediaEl.src;
+                lightboxImg.alt = mediaEl.alt || 'Работа';
+
+                // Проверяем пропорции изображения: если высота заметно превышает ширину (длинный лендинг)
+                const isTallLanding = (mediaEl.naturalHeight / mediaEl.naturalWidth) > 1.2;
+
+                if (isTallLanding) {
+                    lightbox.classList.remove('is-contained');
+                } else {
+                    lightbox.classList.add('is-contained');
+                }
             }
 
             if (lightboxScroll) {
@@ -952,19 +1039,27 @@
             lightbox.classList.remove('active');
             lightbox.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
+            if (lightboxVideo) {
+                lightboxVideo.pause();
+            }
         }
 
         document.querySelectorAll('.work-item').forEach(item => {
             item.addEventListener('click', (e) => {
+                const video = item.querySelector('video');
                 const img = item.querySelector('.zoomable-img');
-                if (img) openLightbox(img);
+                if (video) {
+                    openLightbox(video, item.dataset.fullSrc);
+                } else if (img) {
+                    openLightbox(img);
+                }
             });
         });
 
-        // Закрытие при клике по любой темной области (вне самого изображения)
+        // Закрытие при клике по любой темной области (вне самого медиа)
         lightbox.addEventListener('click', (e) => {
-            // Клик по самому изображению не закрывает
-            if (e.target === lightboxImg) return;
+            // Клик по самому изображению или видео не закрывает
+            if (e.target === lightboxImg || e.target === lightboxVideo) return;
 
             // Предотвращаем закрытие при клике по нативному скроллбару справа
             if (lightboxScroll && e.clientX >= lightboxScroll.clientWidth) {
@@ -980,6 +1075,21 @@
                 closeLightbox();
             }
         });
+
+        // Энергоэффективный IntersectionObserver: пауза видео при скролле вне экрана
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const v = entry.target;
+                const worksTab = document.getElementById('tab-works');
+                if (entry.isIntersecting && worksTab && worksTab.classList.contains('active')) {
+                    v.play().catch(() => {});
+                } else {
+                    v.pause();
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.work-item video').forEach(v => videoObserver.observe(v));
 
         // Intersection Observer for scroll animations
         const observerOptions = {
